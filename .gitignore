@@ -1,14 +1,24 @@
-# Backend
-backend/venv/
-backend/__pycache__/
-backend/.env
-backend/*.pyc
+# =====================
+# Python
+# =====================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.env
+# =====================
+# Virtual Environment
+# =====================
+venv/
+.env
 
+# =====================
+# FastAPI / Runtime
+# =====================
+*.log
+
+# =====================
 # OS
+# =====================
 .DS_Store
 Thumbs.db

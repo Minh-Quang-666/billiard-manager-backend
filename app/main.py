@@ -1,28 +1,29 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import active   # router active tables
+from app.routers import active   # hoặc đúng path router của bạn
 
-app = FastAPI(
-    title="Billiard Manager API",
-    version="1.0.0"
-)
+app = FastAPI()
 
-# ✅ CORS CONFIG
+# ===============================
+# ✅ CORS CONFIG (QUAN TRỌNG)
+# ===============================
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",  # Vue dev
-        "http://127.0.0.1:5173"
+        "http://localhost:5173",
+        "http://localhost:5174",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# routers
+# ===============================
+# ROUTERS
+# ===============================
 app.include_router(active.router)
 
 @app.get("/")
 def root():
-    return {"status": "ok"}
+    return {"status": "OK"}
