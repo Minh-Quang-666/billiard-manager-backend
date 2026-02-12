@@ -13,6 +13,7 @@ def list_foods():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 SELECT id, name, price
                 FROM foods
@@ -36,6 +37,7 @@ def add_food(payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute(
                 "SELECT id FROM foods WHERE id = %s",
                 (food_id,)
@@ -67,6 +69,7 @@ def update_food(food_id: str, payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 UPDATE foods
                 SET name = %s, price = %s
@@ -83,6 +86,7 @@ def delete_food(food_id: str):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             # xóa ở active_table_foods trước
             cursor.execute(
                 "DELETE FROM active_table_foods WHERE food_id = %s",

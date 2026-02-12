@@ -16,6 +16,7 @@ def list_cues():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 SELECT id, name, price
                 FROM billiard_cues
@@ -42,6 +43,7 @@ def add_cue(payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute(
                 "SELECT id FROM billiard_cues WHERE id = %s",
                 (cue_id,)
@@ -75,6 +77,7 @@ def update_cue(cue_id: str, payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 UPDATE billiard_cues
                 SET name = %s, price = %s
@@ -94,6 +97,7 @@ def delete_cue(cue_id: str):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             # ❗ xóa luôn bên active_table_cues (KHÔNG CHECK)
             cursor.execute(
                 "DELETE FROM active_table_cues WHERE cue_id = %s",

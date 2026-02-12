@@ -21,6 +21,7 @@ def login(payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute(
                 "SELECT password FROM users WHERE username = %s",
                 (username,)

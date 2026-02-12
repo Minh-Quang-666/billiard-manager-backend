@@ -17,6 +17,7 @@ def get_active_tables():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 SELECT 
                     tb.id            AS table_id,
@@ -64,7 +65,7 @@ def checkout_table(table_id: str, payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
-
+            cursor.execute("SET time_zone = '+07:00'")
             # 1. Validate payload
             if "end_time" not in payload:
                 raise HTTPException(status_code=400, detail="end_time is required")
@@ -173,6 +174,7 @@ def start_table(table_id: str, payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             player_name = payload.get("player_name")
             if not player_name:
                 raise HTTPException(status_code=400, detail="player_name is required")
@@ -220,6 +222,7 @@ def list_foods():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("SELECT * FROM foods")
             return cursor.fetchall()
     finally:
@@ -233,6 +236,7 @@ def list_cues():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("SELECT * FROM billiard_cues")
             return cursor.fetchall()
     finally:
@@ -252,6 +256,7 @@ def update_food(table_id: str, payload: dict):
             raise HTTPException(400, "food_id and quantity required")
 
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 SELECT id FROM active_tables
                 WHERE table_id = %s AND is_active = 1
@@ -308,6 +313,7 @@ def update_cue(table_id: str, payload: dict):
             raise HTTPException(400, "cue_id and quantity required")
 
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 SELECT id FROM active_tables
                 WHERE table_id = %s AND is_active = 1

@@ -16,6 +16,7 @@ def list_tables():
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 SELECT id, name, price_per_hour
                 FROM table_billiard
@@ -42,6 +43,7 @@ def add_table(payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             # check exist
             cursor.execute(
                 "SELECT id FROM table_billiard WHERE id = %s",
@@ -83,6 +85,7 @@ def update_table(table_id: str, payload: dict):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             cursor.execute("""
                 UPDATE table_billiard
                 SET name = %s, price_per_hour = %s
@@ -102,6 +105,7 @@ def delete_table(table_id: str):
     conn = get_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute("SET time_zone = '+07:00'")
             # 🔍 check bàn có đang active không
             cursor.execute("""
                 SELECT is_active
