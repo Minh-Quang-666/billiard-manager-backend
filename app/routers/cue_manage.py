@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from app.database import get_connection
+from app.dependencies.auth import get_current_user
 
 router = APIRouter(
     prefix="/cues",
-    tags=["Cue Management"]
+    tags=["Cue Management"],
+    dependencies=[Depends(get_current_user)]
 )
 
 # =============================

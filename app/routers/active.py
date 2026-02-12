@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from datetime import datetime
 from app.database import get_connection
+from app.dependencies.auth import get_current_user
 
 router = APIRouter(
     prefix="/active-tables",
-    tags=["Active Tables"]
+    tags=["Active Tables"],
+    dependencies=[Depends(get_current_user)]
 )
 
 # =========================================================

@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from app.database import get_connection
+from app.dependencies.auth import get_current_user
 
 router = APIRouter(
     prefix="/tables",
-    tags=["Table Management"]
+    tags=["Table Management"],
+    dependencies=[Depends(get_current_user)]
 )
 
 # =============================
