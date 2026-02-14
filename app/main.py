@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers import active   # hoặc đúng path router của bạn
 from app.routers import table_manage
 from app.routers import food_manage
-from app.routers import cue_manage, auth
+from app.routers import cue_manage, auth, health
 
 app = FastAPI()
 
@@ -31,6 +31,7 @@ app.include_router(active.router)
 app.include_router(table_manage.router)
 app.include_router(food_manage.router)
 app.include_router(cue_manage.router)
+app.include_router(health.router)
 
 @app.get("/")
 def root():

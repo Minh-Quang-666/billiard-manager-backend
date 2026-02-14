@@ -175,10 +175,14 @@ def start_table(table_id: str, payload: dict):
     try:
         with conn.cursor() as cursor:
             cursor.execute("SET time_zone = '+07:00'")
+
             player_name = payload.get("player_name")
+            start_time_input = payload.get("start_time")
+
             if not player_name:
                 raise HTTPException(status_code=400, detail="player_name is required")
 
+            # check table
             cursor.execute("""
                 SELECT is_active FROM active_tables
                 WHERE table_id = %s
@@ -191,21 +195,32 @@ def start_table(table_id: str, payload: dict):
             if row["is_active"] == 1:
                 raise HTTPException(status_code=400, detail="Table already active")
 
+            # xử lý start_time
+            if start_time_input:
+                start_time = datetime.strptime(start_time_input, "%Y-%m-%d %H:%M:%S")
+                now = datetime.now()
+
+                if start_time > now:
+                    raise HTTPException(status_code=400, detail="Start time cannot be in the future")
+            else:
+                start_time = datetime.now()
+
             cursor.execute("""
                 UPDATE active_tables
                 SET 
                     is_active = 1,
-                    start_time = NOW(),
+                    start_time = %s,
                     player_name = %s
                 WHERE table_id = %s
-            """, (player_name, table_id))
+            """, (start_time, player_name, table_id))
 
             conn.commit()
 
             return {
                 "message": "Start table success",
                 "table_id": table_id,
-                "player_name": player_name
+                "player_name": player_name,
+                "start_time": start_time
             }
 
     except Exception as e:
