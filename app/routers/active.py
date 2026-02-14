@@ -1,10 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
-from datetime import datetime, timezone, timedelta
-from zoneinfo import ZoneInfo
+from datetime import datetime, timedelta
 from app.database import get_connection
 from app.dependencies.auth import get_current_user
-
-VN_TZ = timezone(timedelta(hours=7))
 router = APIRouter(
     prefix="/active-tables",
     tags=["Active Tables"],
@@ -72,7 +69,10 @@ def checkout_table(table_id: str, payload: dict):
             if "end_time" not in payload:
                 raise HTTPException(status_code=400, detail="end_time is required")
 
-            end_time = datetime.strptime(payload["end_time"], "%Y-%m-%d %H:%M:%S").astimezone(VN_TZ).replace(tzinfo=None)
+            end_time = datetime.strptime(
+                payload["end_time"],
+                "%Y-%m-%d %H:%M:%S"
+            )
 
             # 2. Lấy active table
             cursor.execute("""
@@ -197,15 +197,21 @@ def start_table(table_id: str, payload: dict):
             if row["is_active"] == 1:
                 raise HTTPException(status_code=400, detail="Table already active")
 
-            # xử lý start_time
             if start_time_input:
-                start_time = datetime.strptime(start_time_input, "%Y-%m-%d %H:%M:%S").astimezone(VN_TZ).replace(tzinfo=None)
-                now = datetime.now(VN_TZ).replace(tzinfo=None)
-
-                if start_time > now:
-                    raise HTTPException(status_code=400, detail="Start time cannot be in the future")
+                start_time = datetime.strptime(
+                    start_time_input, "%Y-%m-%d %H:%M:%S"
+                )
             else:
-                start_time = datetime.now(VN_TZ).replace(tzinfo=None)
+                start_time = datetime.utcnow() + timedelta(hours=7)
+
+            now = datetime.utcnow() + timedelta(hours=7)
+
+            if start_time > now:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Start time cannot be in the future"
+                )
+
 
             cursor.execute("""
                 UPDATE active_tables
