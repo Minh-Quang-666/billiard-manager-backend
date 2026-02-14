@@ -179,7 +179,7 @@ def start_table(table_id: str, payload: dict):
             cursor.execute("SET time_zone = '+07:00'")
 
             player_name = payload.get("player_name")
-            start_time_input = payload.get("start_time").strip()
+            start_time_input = payload.get("start_time")
 
             if not player_name:
                 raise HTTPException(status_code=400, detail="player_name is required")
